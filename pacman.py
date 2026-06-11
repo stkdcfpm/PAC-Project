@@ -288,9 +288,9 @@ class Player:
         tx, ty = self.maze.tile_to_px(tc, tr)
         dist = math.hypot(self.x - tx, self.y - ty)
 
-        # Apply direction change at tile centre — only once per tile entry.
-        # Threshold: within (speed + 1) px so a fast entity never skips centre.
-        if (tc, tr) != self._aligned_tile and dist <= speed + 1:
+        # Apply direction change at tile centre — once per tile entry, OR any
+        # time the player is stopped (so a new keypress can restart movement).
+        if ((tc, tr) != self._aligned_tile or self.dir == Dir.NONE) and dist <= speed + 1:
             self.x, self.y = tx, ty          # snap precisely to centre
             self._aligned_tile = (tc, tr)
 
